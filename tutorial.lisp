@@ -1,108 +1,109 @@
-; du kommst einfach nicht dahinter, wie lisp funktioniert aber du interessierst dich aus irgendeinem grund dafür?
-; hier gibts einige kleine goodies, die dich in die lage versetzen, lisp besser zu lernen. unten gibts ein paar gute lernquellen, die restliche datei ist einfach dazu
-; da, beginnern ein bisschen unter die arme zu greifen. viel spaß.
+; Du kommst einfach nicht dahinter, wie LISP funktioniert aber du interessierst dich aus irgendeinem Grund dafür?
+; Hier gibts einige kleine Goodies, die dich in die Lage versetzen, lisp besser zu lernen. Unten gibt es ein paar gute Lernquellen.
+; Die restliche Datei ist einfach dazu da, Anfängern ein bisschen unter die Arme zu greifen.
+; Viel Spaß.
 
 
-;;; falls nicht schon bekannt, LISP steht für "List processing language" weil die häufigste Datenstruktur die Liste ist
-(list a b c)
-;(a b c)
+;;; Falls nicht schon bekannt, LISP steht für "List processing language" weil die häufigste Datenstruktur die Liste ist.
+(list 1 2 3)
+;(1 2 3)
 
-; zahlen evaluieren zu sich selbst
+; Zahlen evaluieren zu sich selbst.
 4
 ;4
 
-; brüche werden gekürzt aber nicht als dezimalbruch dargestellt
-(/ 4 6); präfixnotation, keine infixnotation (also / 2 3 statt  2 / 3)
+; Brüche werden gekürzt aber nicht als Dezimalbruch dargestellt.
+(/ 4 6); Präfixnotation, keine Infixnotation (also (/ 2 3) statt  (2 / 3))
 ;2/3
 
-2 / 3 ; bei brüchen klappt auch infix 
+2 / 3 ; bei Brüchen klappt auch Infix 
 ;2/3
 
-;;; processing von listen: von links nach rechts, das 0-te element aber als letztes
-(+ 1 2 3) ; erst evaluiert die 1 zu sich selbst, dann die 2, dann die 3 und dann wird die + funktion mit 1,2 und 3 als argument aufgerufen
+;;; Processing von listen: von links nach rechts, das 0-te Element wird aber als letztes evaluiert
+(+ 1 2 3) ; Erst evaluiert die 1 zu sich selbst, dann die 2, dann die 3 und dann wird die + funktion mit 1,2 und 3 als Argumente aufgerufen.
 ;6
 
 #|
-  mehrzeiliger kommentar
+  Dies ist ein mehrzeiliger Kommentar.
   #|
-    mehrzeiliger kommentar kann genestet werden, KP wofür das gut sein soll, aber there you go
+    Mehrzeiliger Kommentar kann genestet werden, KP wofür das gut sein soll, aber there you go.
   |#
-  ; kombination mit einzeiligen komments ist möglich
+  ; Kombination mit einzeiligen Kommentaren ist möglich.
 |#
 
 
-;;; es gibt viele verschiedene wege, variablen anzulegen. wir erstellen eine dummy funktion, damit die variablen nicht das globale scope zumüllen:
+;;; Es gibt viele verschiedene Wege, Variablen anzulegen. Wir erstellen eine dummy Funktion, damit die Variablen nicht das globale scope zumüllen:
 (defun dummy-vars ()
-  (defconstant my-const 42) ; macht eine konstante, konstanten können nicht geändert werden
+  (defconstant my-const 42) ; Erstellt eine Konstante; Konstanten können nicht geändert werden.
 
-  (defvar my-var 69) ; bindet die variable my-var an den wert 69
-  (defparameter my-var2 420) ; bindet den "parameter" an den wert 420
+  (defvar my-var 69) ; Bindet die Variable my-var an den Wert 69.
+  (defparameter my-var2 420) ; Bindet den "Parameter" an den Wert 420.
 
-  (setq my-var3 3.14) ; bindet die variable my-var3 an den wert 3.14
-  (setf my-var4 42) ; bindet ... whatever you get it
+  (setq my-var3 3.14) ; Bindet die Variable my-var3 an den Wert 3.14.
+  (setf my-var4 42) ; Bindet ... whatever you get it
 
-  (let ((a 1337)) ; let ist interessant: es erstellt ein scope, in dem a gültig ist.
-    (+ a 1) ; hier kommt 1338 raus
-  ) ; ab hier ist a nicht mehr zugrifbar
+  (let ((a 1337)) ; let ist interessant: es erstellt ein Scope, in dem a gültig ist.
+    (+ a 1) ; Hier kommt 1338 raus.
+  ) ; Ab hier ist a nicht mehr zugrifbar.
 
-  (let ((a 1) (b 2)) ; mit let lassen sich variablen auch weniger behindert erstellen: es sind mehrere möglich
+  (let ((a 1) (b 2)) ; Mit let lassen sich Variablen auch weniger anstrengend erstellen: es sind mehrere möglich.
     (+ a b)
   )
 
-  (let* ((a 1) (b 2) (c (+ a b))) ; mit let* (ja die haben das echt so genannt :p) ist es möglich, in der zuweisungsliste die definierten variablen
-    (+ a b c)                     ; zum definieren anderer variablen zu nutzen. MIT let GEHT DAS NICHT.
-  ) ; hier wird 6 returned        ; außerdem machen die klammern das ganze recht schnell unschön. am besten einfach klammern beim lesen weitestgehend ignorieren
+  (let* ((a 1) (b 2) (c (+ a b))) ; Mit let* (Ja die haben das echt so genannt :p) ist es möglich, in der Zuweisungsliste die definierten Variablen
+    (+ a b c)                     ; zum definieren anderer Variablen zu nutzen. MIT let GEHT DAS NICHT.
+  ) ; hier wird 6 evaluiert        ; außerdem machen die Klammern das ganze recht schnell unschön. Am besten einfach Klammern beim lesen weitestgehend ignorieren.
 
 
   ;;; defvar und defparameter haben kleine unterschiede:
-  (defvar a 10) ; erzeugt hier eine variable
+  (defvar a 10) ; defvar erzeugt hier eine Variable.
   ;A
   a
   ;10
-  (defvar a 42) ; kann eine variable nicht überschreiben
+  (defvar a 42) ; defvar kann eine Variable nicht überschreiben.
   ;A
   a
   ;10
 
-  (defparameter b 10) ; macht b zu 10
+  (defparameter b 10) ; defparameter weist 10 zu b.
   ;B
   b
   ;10
-  (defparameter b 20) ; macht b zu 20
+  (defparameter b 20) ; defparameter weist 20 zu b.
   ;B
   b
   ;20
 
-  ;;; setq und setf haben auch kleine unterschiede. Welche das sind, kann hier https://stackoverflow.com/questions/869529/difference-between-set-setq-and-setf-in-common-lisp
-  ;;; nachgelesen werden. prinzipiell kann immer setf verwendet werden, vergiss also einfach, dass es setq gibt, wenn du selber lisp programmierst.
+  ;;; setq und setf haben auch kleine Unterschiede. Welche das sind, kann hier
+  ;;; https://stackoverflow.com/questions/869529/difference-between-set-setq-and-setf-in-common-lisp
+  ;;; nachgelesen werden. Prinzipiell kann immer setf verwendet werden, vergiss also einfach, dass es setq gibt, wenn du selber lisp programmierst.
 )
 
 
 #|
-  wenn du das liest, solltest du eine pause machen, das war jetzt schon recht viel zeug. 
-  am besten liest du das alles nochmal nach, wenn es dir zu viel auf einmal war.
+  Wenn du das liest, solltest du eine Pause machen, das war jetzt schon recht viel Zeug. 
+  Am besten liest du das alles nochmal nach, wenn es dir zu viel auf einmal war.
+
+
+  Bis jetzt haben wir uns nicht an Konventionen gehalten. Das ist schlecht. Wir ändern das nun:
+
+  Globale Variablen haben spezielle Namen, damit man direkt sieht, dass sie global sind:
+  *globale-var*: die * zeigen, dass das Ding echt special ist, globale vars haben ein großes fuck-up potential.
+
+  Konstanten haben eine ähnliche form: +const-var+
+
+  Klammern werden nicht wie bisher organisiert (nicht so wie in anderen Sprachen normalerweise, mehr im nächsten bsp)
 |#
 
-
-;;; bis jetzt haben wir uns nicht an konventionen gehalten. das ist schlecht. wir ändern das nun:
-|#
-  globale variablen haben spezielle namen, damit man direkt sieht dass sie global sind:
-  *globale-var* die * zeigen, dass das ding echt special ist, globale vars sind pretty dangerous.
-
-  konstanten haben eine ähnliche form: +const-var+
-
-  klammern werden nicht wie bisher organisiert (nicht so wie in anderen sprachen normalerweise, mehr im nächsten bsp)
-#|
-
-;;; klammern organisation
+;;; Klammern Organisation
 (defun some-function (param-A param-B)
   (let ((c 4))
     (+ param-A param-B c)))
-; ende der funktion
-; die schließenden klammern werden hinten angestaut, die interessieren eh niemand. die funktionen werden dann entsprechend eingerückt, wie in python
-; nur dass es nicht verpflichtend ist...    lisp ist eigentlich python nur mit klammern xD
+; Ende der Funktion
+; Die schließenden Klammern werden hinten angestaut, die interessieren eh niemand. Die Funktionen werden dann entsprechend eingerückt, wie in Python.
+; Nur dass es nicht verpflichtend ist...    lisp ist eigentlich Python nur mit Klammern xD.
 
-;;; das wars auch schon mit konventionen. machen wir weiter mit call-by-value:
+;;; Das wars auch schon mit Konventionen. Machen wir weiter mit call-by-value:
 
 ;;; Es gibt nur Call-By-Value.
 (defvar *a* 42)
@@ -118,10 +119,10 @@
 ;42
 
 
-;;; Let überschreibt nur innerhalb der funktion (man nennt das überdecken oder overshadowing)
+;;; Let überschreibt nur innerhalb der Funktion (man nennt das überdecken oder overshadowing)
 *a*
 ;42
-(defun fun () ; statt leerer parameterliste kann auch nil geschrieben werden
+(defun fun () ; Anstatt einer leeren Parameterliste kann auch nil geschrieben werden.
   (let ((*a* 69) (b 42)) 
     (+ *a* b)))
 ;111
@@ -220,10 +221,11 @@
 ;  car  cdr
 ; um das exakt darzustellen, hat lisp nochmal eine extra syntax:
 (cons 69 42)
-;(69 . 42)
+;(69 . 42) ; wird dottet-pair genannt
 ;
 ; um wieder auf den anfang des blocks zurückzukommen, mapcar heißt mapcar, weil es map ist und aus der liste alle cars nimmt.
-
+;
+; du bist nicht gezwungen, car und cdr zu nutzen, es gibt die deutlich modernere schreibweise first und rest.
 #|
   du kennst nun:
   - syntax von lisp
@@ -285,6 +287,8 @@
 ; somit wird aus (reduce #'+ '(1 2 3 4)) dann 1 + 2 + 3 + 4 = 10
 
 ; map und reduce sind sehr häufig nutzbare konzepte, die du in vielen algorithmen anwenden kannst.
+; so kannst du etwa 70% der algorithmen der standard library in c++ (Stand 2020) mit reduce implementieren. das ist kein scherz.
+;
 ; aber warum heißten map und reduce funktionen höherer ordnung?
 ; weil sie funktionen als parameter nehmen und sich die eigene funktionalität je nach gegebener funktion massiv unterscheidet.
 #|
@@ -315,7 +319,9 @@
 ; das loop und das do sind so oldfashioned, wir neumodischen programmierer finden das doof und man kann ja viel syntax sparen und so...
 ; und lisp lässt uns nicht hängen: es gibt zum glück makros, die uns genau das ermöglichen.
 ; makros schreibt man fast wie funktionen:
-(defmacro while (test &body body) #| hier kommt der eigentliche code hin |# )
+(defmacro while (test &body body)
+     #| hier kommt der eigentliche code hin |#
+)
 ; sieht so weit schon stark aus wie eine funktion, nicht wahr?
 ; &body ist ähnlich wie &optional (das hatten wir schon weiter oben), aber anstatt optionale parameter zu markieren, ist es einfach der rest in der parameterliste.
 ; unsere gewünschte while funktion hat auch 3 parameter: einmal den test, dann die funktion format, dann die funktion setf. wir können so beliebig viele parameter reinwerfen.
@@ -329,14 +335,16 @@
 ; (progn (format t "~d " x) (setf x (+ x 1)))
 ; progn macht einfach dass alles in dem block als separates statement ausgeführt wird.
 ; irgendwie müssen wir also das progn vor das format in die liste rein kriegen. fällt dir was ein?
-; hier ist die lösung: wir können natürlich cons dafür benutzen:
+; hier ist die lösung: wir können cons dafür benutzen:
 (defmacro while (test &body body)
   (list 'loop 'while test 'do (cons 'progn body)))
 ; damit sollten wir jetzt endlich unsere while schleife benutzen können, so wie wir wollen.
-(setf x 0)
-(while (< x 10)
-  (format "~d " x)
-  (setf x (+ x 1)))
+#|
+(setf y 0)
+(while (< y 10)
+  (format "~d " y)
+  (setf y (+ y 1)))
+|#
 ; probier am besten selbst aus, ob das so klappt (ich hab das natürlich selbst schon getestet und es funktioniert ^^).
 
 ; wenn das alles für dich nachvollziehbar war, dann herzlichen glühstrumpf, du bist fertig mit dem tutorial. wenn du lisp komisch aber iwie cool findest, dann gehts dir
@@ -359,7 +367,7 @@
 ; https://lisp-lang.org/
 ; http://www.gigamonkeys.com/book/
 ; https://github.com/norvig/paip-lisp
-; das sind zumindest die sources, die ich verwendet habe. wenn ich was vergessen haben sollte, sag mir einfach bescheid. Kontakt ist gaaaanz unten
+; das sind zumindest die ressourcen, die ich verwendet habe. wenn ich was vergessen haben sollte, sag mir einfach bescheid. Kontakt ist gaaaanz unten
 ;
 ; hilfe kannst du immer hier bekommen:
 ; https://stackoverflow.com/
@@ -367,5 +375,5 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Kontakt: L0ren2#7329
+; Kontakt: L0ren2#7329 (Discord)
 ; cheers :)
