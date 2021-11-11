@@ -298,6 +298,38 @@
   das ist eine super übung.
 |#
 
+
+; Bleiben wir noch mal eben bei Funktionen. Hier hast du eine typische Funktion, welche ein gutes Beispiel für die Optimierungen von Compilern
+; bietet. Die Funktion ist die Fakultätsfunktion, die Fakultät von 5 ist 5 * 4 * 3 * 2 * 1 = 120. Die Fakultät von 4 ist 4*3*2*1=24
+; Fakultätsrechnen ist in vielen Bereichen der Mathematik gar nicht wegzudenken. Die typische Schreibweise ist 5!.
+; Kommt dir bekannt vor? Hier ist die Funktion:
+(defun fakulty (n)
+	(if (< n 2)
+	  	1
+		(* n (fakulty (- n 1))))) 
+
+; Der Nachteil dieser Implentierung ist, dass das Programm immer n Stackframes benötigt, da sich die Funktion immer n-mal selbst aufruft.
+; Bei großen Zahlen für n stürzt so das Programm ab, denn die Größe des Stacks ist begrenzt. Du kannst mal ausprobieren, wie groß der Stack
+; bei deinem Computer ist, bei mir stürzt das programm ab, wenn ich für n 996 einsetze.
+
+; Hier ist eine bessere Version der fakulty methode:
+(defun fakulty (n &optional (old_n 1))
+	(if (< n 2)
+		old_n
+		(fakulty (- n 1) (* old_n n))))
+
+; Das sieht jetzt schon viel komplizierter aus, aber es ist (fast) das gleiche Programm. 
+; Die Änderungen sind: wir haben jetzt einen optionalen Parameter (old_n). Dieser wird auf 1 gesetzt, wenn wir ihn nicht angeben.
+; Anstatt am ende n * fakulty (n - 1) zu schreiben, haben wir die multiplikation in das old_n des nächsten Funktionsaufrufs ausgelagert. 
+; Bei n < 2 geben wir nicht 1 zurück, sondern old_n, welches das Endergebnis beinhaltet.
+; Die MASSIVEN Vorteile die wir dabei jetzt haben, sind vor allem unsere Compileroptimierungen (ja LISP hat einen compiler).
+; Dazu können wir mit (compile 'fakulty) die Funktion compilieren, wir bekommen dann eine Version der Funktion fakulty, welche 
+; den Stack viel besser nutzt als die alte Version. Sie braucht nur ein einziges Stackframe.
+; Das funktioniert, indem der Compiler merkt, dass wir einen sogenannten Akkumulator verwenden (old_n).
+; Der Compiler merkt hier, dass wir die alten Stackframes nicht brauchen, und entfernt diese für uns.
+; Die short und takeaway-lesson dabei ist folgende: Benutze einen Akkumulator (für Rekursive Funktionen), wann immer du kannst.
+
+
 ;;; als nächstes großes thema stehen noch makros auf dem plan.
 ; makros sind funktionen, die funktionen generieren. das hört sich spoopy an aber ist relativ ez.
 ; lisp hat keine while schleife. es hat sowas ähnliches, ist aber ziemlich wonky das zu nutzen.
